@@ -5,7 +5,7 @@ EXEC=test_lecteurs_redacteurs
 
 all: $(EXEC)
 			rm *.o
-			./test_lecteurs_redacteurs 10 10 3
+			./test_lecteurs_redacteurs 10 3 3
 			
 test_lecteurs_redacteurs: lectred.o test_lecteurs_redacteurs.o
 			$(CC) -o $@ $^ $(LDFLAGS)
