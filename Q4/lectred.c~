@@ -25,7 +25,7 @@ struct lectred* lectred_init() {
 }
 
 void begin_read(struct lectred* lectred) {
-	sem_wait(&lectred->sem_prio_writ); //// NAN ! //
+	sem_wait(&lectred->sem_prio_writ);
 	sem_post(&lectred->sem_prio_writ);
 	sem_wait(&lectred->mutex_nb_lecteur_en_cour);
 	if(lectred->nb_lecteur_en_cour == 0) {
