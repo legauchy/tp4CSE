@@ -56,12 +56,16 @@ void remove_thread_list(struct lectred* lectred) {
 	}
 }
 
+int est_pas_premier(struct lectred* lectred, pthread_cond_t * ma_cond) {
+	return ma_cond != lectred->first->ma_cond; 
+}
+
 void begin_read(struct lectred* lectred) {
 	pthread_mutex_lock(&lectred->mutex);
 	
 	pthread_cond_t * ma_cond = add_thread_list(lectred, 1);
 	
-	while(lectred->first != NULL && lectred->first->ma_cond != ma_cond || lectred->nb_w > 0) {
+	while(est_pas_premier(lectred, ma_cond) || lectred->nb_w > 0) {
 		pthread_cond_wait( ma_cond, &lectred->mutex);
 	}
 	
@@ -91,7 +95,7 @@ void begin_write(struct lectred* lectred) {
 	
 	pthread_cond_t * ma_cond = add_thread_list(lectred, 0);
 	
-	while(lectred->first != NULL && lectred->first->ma_cond != ma_cond || lectred->nb_l > 0 || lectred->nb_w > 0) {
+	while(est_pas_premier(lectred, ma_cond) || lectred->nb_l > 0 || lectred->nb_w > 0) {
 		pthread_cond_wait( ma_cond, &lectred->mutex);
 	}
 	lectred->nb_w ++;
